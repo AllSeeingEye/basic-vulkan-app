@@ -6,6 +6,8 @@ This is basically a stripped-down version of Sascha Willems' triangle demo:
 
 https://github.com/SaschaWillems/Vulkan/blob/master/examples/triangle/triangle.cpp
 
+![triangle-demo](https://github.com/AllSeeingEye/basic-vulkan-app/assets/469746/6d4e9bb4-294a-45ba-8f74-e05ef250aa1b)
+
 # Changes done to Sascha Willems' demo
 
 - removed all CMake stuff - Windows-only (Visual Studio) build now.
