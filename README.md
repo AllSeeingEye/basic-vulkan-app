@@ -2,7 +2,9 @@
 
 (not quite) Basic Vulkan app that simply draws a triangle.
 
-This is basically a stripped-down version of Sascha Willems' triangle demo.
+This is basically a stripped-down version of Sascha Willems' triangle demo:
+
+https://github.com/SaschaWillems/Vulkan/blob/master/examples/triangle/triangle.cpp
 
 # Changes done to Sascha Willems' demo
 
@@ -22,6 +24,6 @@ This is basically a stripped-down version of Sascha Willems' triangle demo.
 
 - in Visual Studio, open `basic-vulkan-app\Basic Vulkan App.sln`;
 
-- you might have to edit/correct various library/include paths;
+- you might have to edit/correct various library/include paths in VS project settings;
 
 - rebuild the project and run.
