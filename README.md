@@ -10,16 +10,18 @@ This is basically a stripped-down version of Sascha Willems' triangle demo.
 
 - removed all references to KTX library (that made project excessively hard to compile).
 
-- adjusted hard-coded paths in the code.
+- adjusted some hard-coded paths in the code.
 
 - removed shaders irrelevant to the demo.
 
 ## Building and running
 
-- clone,
+- prerequisites: Visual Studio 2017 Community Edition, Vulkan SDK v. 1.3.xxx.x;
 
-- in Visual Studio, open `basic-vulkan-app\Basic Vulkan App.sln`,
+- clone;
 
-- you might have to edit/correct various library/include paths,
+- in Visual Studio, open `basic-vulkan-app\Basic Vulkan App.sln`;
+
+- you might have to edit/correct various library/include paths;
 
 - rebuild the project and run.
