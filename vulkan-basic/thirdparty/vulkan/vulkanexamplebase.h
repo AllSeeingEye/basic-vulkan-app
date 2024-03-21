@@ -1,7 +1,7 @@
 /*
 * Vulkan Example base class
 *
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
+* Copyright (C) 2016-2024 by Sascha Willems - www.saschawillems.de
 *
 * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
 */
@@ -49,7 +49,6 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #define GLM_ENABLE_EXPERIMENTAL
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
@@ -185,6 +184,22 @@ public:
 		bool overlay = true;
 	} settings;
 
+	/** @brief State of gamepad input (only used on Android) */
+	struct {
+		glm::vec2 axisLeft = glm::vec2(0.0f);
+		glm::vec2 axisRight = glm::vec2(0.0f);
+	} gamePadState;
+
+	/** @brief State of mouse/touch input */
+	struct {
+		struct {
+			bool left = false;
+			bool right = false;
+			bool middle = false;
+		} buttons;
+		glm::vec2 position;
+	} mouseState;
+
 	VkClearColorValue defaultClearColor = { { 0.025f, 0.025f, 0.025f, 1.0f } };
 
 	static std::vector<const char*> args;
@@ -197,28 +212,17 @@ public:
 	bool paused = false;
 
 	Camera camera;
-	glm::vec2 mousePos;
 
 	std::string title = "Vulkan Example";
 	std::string name = "vulkanExample";
 	uint32_t apiVersion = VK_API_VERSION_1_0;
 
+	/** @brief Default depth stencil attachment used by the default render pass */
 	struct {
 		VkImage image;
-		VkDeviceMemory mem;
+		VkDeviceMemory memory;
 		VkImageView view;
-	} depthStencil;
-
-	struct {
-		glm::vec2 axisLeft = glm::vec2(0.0f);
-		glm::vec2 axisRight = glm::vec2(0.0f);
-	} gamePadState;
-
-	struct {
-		bool left = false;
-		bool right = false;
-		bool middle = false;
-	} mouseButtons;
+	} depthStencil{};
 
 	// OS specific
 #if defined(_WIN32)
@@ -305,46 +309,46 @@ public:
 	void initWaylandConnection();
 	void setSize(int width, int height);
 	static void registryGlobalCb(void *data, struct wl_registry *registry,
-			uint32_t name, const char *interface, uint32_t version);
+		uint32_t name, const char *interface, uint32_t version);
 	void registryGlobal(struct wl_registry *registry, uint32_t name,
-			const char *interface, uint32_t version);
+		const char *interface, uint32_t version);
 	static void registryGlobalRemoveCb(void *data, struct wl_registry *registry,
-			uint32_t name);
+		uint32_t name);
 	static void seatCapabilitiesCb(void *data, wl_seat *seat, uint32_t caps);
 	void seatCapabilities(wl_seat *seat, uint32_t caps);
 	static void pointerEnterCb(void *data, struct wl_pointer *pointer,
-			uint32_t serial, struct wl_surface *surface, wl_fixed_t sx,
-			wl_fixed_t sy);
+		uint32_t serial, struct wl_surface *surface, wl_fixed_t sx,
+		wl_fixed_t sy);
 	static void pointerLeaveCb(void *data, struct wl_pointer *pointer,
-			uint32_t serial, struct wl_surface *surface);
+		uint32_t serial, struct wl_surface *surface);
 	static void pointerMotionCb(void *data, struct wl_pointer *pointer,
-			uint32_t time, wl_fixed_t sx, wl_fixed_t sy);
+		uint32_t time, wl_fixed_t sx, wl_fixed_t sy);
 	void pointerMotion(struct wl_pointer *pointer,
-			uint32_t time, wl_fixed_t sx, wl_fixed_t sy);
+		uint32_t time, wl_fixed_t sx, wl_fixed_t sy);
 	static void pointerButtonCb(void *data, struct wl_pointer *wl_pointer,
-			uint32_t serial, uint32_t time, uint32_t button, uint32_t state);
+		uint32_t serial, uint32_t time, uint32_t button, uint32_t state);
 	void pointerButton(struct wl_pointer *wl_pointer,
-			uint32_t serial, uint32_t time, uint32_t button, uint32_t state);
+		uint32_t serial, uint32_t time, uint32_t button, uint32_t state);
 	static void pointerAxisCb(void *data, struct wl_pointer *wl_pointer,
-			uint32_t time, uint32_t axis, wl_fixed_t value);
+		uint32_t time, uint32_t axis, wl_fixed_t value);
 	void pointerAxis(struct wl_pointer *wl_pointer,
-			uint32_t time, uint32_t axis, wl_fixed_t value);
+		uint32_t time, uint32_t axis, wl_fixed_t value);
 	static void keyboardKeymapCb(void *data, struct wl_keyboard *keyboard,
-			uint32_t format, int fd, uint32_t size);
+		uint32_t format, int fd, uint32_t size);
 	static void keyboardEnterCb(void *data, struct wl_keyboard *keyboard,
-			uint32_t serial, struct wl_surface *surface, struct wl_array *keys);
+		uint32_t serial, struct wl_surface *surface, struct wl_array *keys);
 	static void keyboardLeaveCb(void *data, struct wl_keyboard *keyboard,
-			uint32_t serial, struct wl_surface *surface);
+		uint32_t serial, struct wl_surface *surface);
 	static void keyboardKeyCb(void *data, struct wl_keyboard *keyboard,
-			uint32_t serial, uint32_t time, uint32_t key, uint32_t state);
+		uint32_t serial, uint32_t time, uint32_t key, uint32_t state);
 	void keyboardKey(struct wl_keyboard *keyboard,
-			uint32_t serial, uint32_t time, uint32_t key, uint32_t state);
+		uint32_t serial, uint32_t time, uint32_t key, uint32_t state);
 	static void keyboardModifiersCb(void *data, struct wl_keyboard *keyboard,
-			uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched,
-			uint32_t mods_locked, uint32_t group);
+		uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched,
+		uint32_t mods_locked, uint32_t group);
 
 #elif defined(_DIRECT2DISPLAY)
-//
+	//
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
 	xcb_window_t setupWindow();
 	void initxcbConnection();
